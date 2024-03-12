@@ -46,7 +46,8 @@ This project automates the process of checking in and out on the Moodle platform
 
 6. **Update the Script**:
    - Open `moodle_attendance.py` in a text editor.
-   - Update the `executable_path` in the `Service` object to the path where you saved `chromedriver.exe`.
+   - Update the `executable_path` in the `Service` object with the path to your `chromedriver.exe`.
+   - Replace `"YOUR_USERNAME"` and `"YOUR_PASSWORD"` with your actual Moodle login credentials.
 
 ## Running the Script Manually
 
