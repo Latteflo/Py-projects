@@ -8,7 +8,7 @@ This project automates the process of checking in and out on the Moodle platform
 - Selenium WebDriver
 - ChromeDriver compatible with your version of Google Chrome
 - Google Chrome Browser
-  
+
 # Moodle Attendance Automation
 
 This project automates the process of checking in and out on the Moodle platform, tailored specifically for BeCode's attendance system. It uses Python and Selenium to interact with web pages, automating daily attendance tasks based on the time of day and day of the week.
@@ -23,25 +23,32 @@ This project automates the process of checking in and out on the Moodle platform
 ## Setup Instructions
 
 1. **Install Python 3.x**:
+
    - Download and install from [python.org](https://www.python.org/downloads/).
 
 2. **Install Selenium**:
+
    - Run `pip install selenium` in your terminal or command prompt to install the Selenium package.
 
 3. **Download ChromeDriver**:
+
    - Go to the [ChromeDriver downloads page](https://sites.google.com/chromium.org/driver/) and download the version that matches your Google Chrome browser.
    - Extract and save `chromedriver.exe` to a known location on your system.
 
 4. **Clone the Repository**:
+
    - Clone this repository to your local machine using `git clone <repository-url>`.
 
 5. **Create an Environment Variables File**:
+
    - In the project directory, create a new file named `.env`.
    - Open `.env` file in a text editor and add the following lines:
+
      ```
      MOODLE_USERNAME=your_username
      MOODLE_PASSWORD=your_password
      ```
+
    - Replace `your_username` and `your_password` with your actual Moodle credentials.
 
 6. **Update the Script**:
@@ -56,14 +63,16 @@ To run the script manually:
 1. Open a terminal or command prompt.
 2. Navigate to the directory where `moodle_attendance.py` is located.
 3. Execute the script by running:
+
    ```shell
    python moodle_attendance.py
    ```
+
 4. The script will automatically open a Chrome browser window, log into Moodle with the credentials from your `.env` file, navigate to the attendance page, and perform the check-in or check-out operation based on the current time and day.
 
-### It's important not to upload your .env file to version control or share it with others as it contains sensitive information.
+### It's important not to upload your .env file to version control or share it with others as it contains sensitive information
 
-#### Ensure that your .env file is listed in your .gitignore if using git to prevent it from being committed.
+#### Ensure that your .env file is listed in your .gitignore if using git to prevent it from being committed
 
 ## Automation
 
@@ -86,11 +95,12 @@ Using `cron`:
 1. **Open Terminal**.
 2. **Edit Crontab**: Type `crontab -e` to edit the cron jobs.
 3. **Schedule Your Script**: Add a line in cron format, e.g., to run every day at 8 AM:
+
 ```shell
 0 8 * * * /usr/bin/python3 /path/to/your/moodle_attendance.py
 ```
-Replace `/usr/bin/python3` with the path to your Python executable, found using `which python3`.
-4. **Save and Exit**: The cron job is now scheduled.
+
+Replace `/usr/bin/python3` with the path to your Python executable, found using `which python3`. 4. **Save and Exit**: The cron job is now scheduled.
 
 ### Linux
 
@@ -99,11 +109,13 @@ Similar to macOS, using `cron`:
 1. **Open Terminal**.
 2. **Edit Crontab**: Type `crontab -e`.
 3. **Add Your Script to the Schedule**: For example, to run at 9 AM daily:
+
 ```shell
 0 9 * * * /usr/bin/python3 /path/to/your/moodle_attendance.py
 ```
 
 Replace `/usr/bin/python3` with the path to your Python executable, found using `which python3`.
+
 1. **Save and Exit**: Your script is now scheduled to run automatically.
 
 ### Notes

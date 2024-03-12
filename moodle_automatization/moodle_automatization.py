@@ -12,12 +12,14 @@ import os
 # Load environment variables from the .env file in the same directory
 load_dotenv()
 
+
 def moodle_attendance():
     # Set Chrome options for the WebDriver
     chrome_options = webdriver.ChromeOptions()
     
     # Define the service using ChromeDriver executable path. Change 'MY_PATH_TO_CHROMEDRIVER' to your actual path in the env file
-    service = Service(executable_path='MY_PATH_TO_CHROMEDRIVER')
+    chromedriver_path = os.getenv('MY_PATH_TO_CHROMEDRIVER')
+    service = Service(executable_path=chromedriver_path)
     
     # Initialize the Chrome WebDriver with the specified service and options
     driver = webdriver.Chrome(service=service, options=chrome_options)
