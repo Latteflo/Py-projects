@@ -47,6 +47,7 @@ This project automates the process of checking in and out on the Moodle platform
      ```
      MOODLE_USERNAME=your_username
      MOODLE_PASSWORD=your_password
+     MY_PATH_TO_CHROMEDRIVER=your_path_to_chromedriver
      ```
 
    - Replace `your_username` and `your_password` with your actual Moodle credentials.
