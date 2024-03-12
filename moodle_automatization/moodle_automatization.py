@@ -16,11 +16,11 @@ load_dotenv()
 def moodle_attendance():
     # Set Chrome options for the WebDriver
     chrome_options = webdriver.ChromeOptions()
-    
+
     # Define the service using ChromeDriver executable path. Change 'MY_PATH_TO_CHROMEDRIVER' to your actual path in the env file
     chromedriver_path = os.getenv('MY_PATH_TO_CHROMEDRIVER')
     service = Service(executable_path=chromedriver_path)
-    
+
     # Initialize the Chrome WebDriver with the specified service and options
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
@@ -29,7 +29,7 @@ def moodle_attendance():
         driver.get("https://moodle.becode.org/login/index.php")
         # Wait for the page elements to load
         time.sleep(2)
-         # Enter username and password from environment variables and click login
+        # Enter username and password from environment variables and click login
         driver.find_element(By.NAME, "username").send_keys(
             os.getenv('MOODLE_USERNAME'))
         driver.find_element(By.NAME, "password").send_keys(
@@ -58,6 +58,7 @@ def moodle_attendance():
         check_in_time = [850, 1326]  # 8:50 AM and 1:26 PM
         check_out_time = [1233, 1658]  # 12:33 PM and 16:58 PM
 
+        original_window = driver.current_window_handle
 
         # Check if it's time to check in and if so, click the check-in button
         if any(check_time <= current_hour_minute <= check_time + 8 for check_time in check_in_time):
@@ -67,6 +68,17 @@ def moodle_attendance():
             for button in check_in_buttons:
                 if button.is_displayed():
                     button.click()
+
+                    # Wait for the new window or tab to open
+                    WebDriverWait(driver, 10).until(
+                        EC.number_of_windows_to_be(2))
+
+                    # Loop through until we find a new window handle
+                    for window_handle in driver.window_handles:
+                        if window_handle != original_window:
+                            driver.switch_to.window(window_handle)
+                            break
+
                     # Wait for the "select location" dropdown to be present after clicking "Check in"
                     WebDriverWait(driver, 10).until(
                         EC.visibility_of_element_located((By.NAME, "location"))
@@ -81,6 +93,10 @@ def moodle_attendance():
                 location_select.select_by_value("athome")
             # Click the submit button to complete the check-in
             driver.find_element(By.NAME, "submitbutton").click()
+
+            # Close the new window and switch back to the original window
+            driver.close()
+            driver.switch_to.window(original_window)
 
         # Check if it's time to check out and if so, click the check-out button
         elif any(check_time <= current_hour_minute <= check_time + 8 for check_time in check_out_time):
