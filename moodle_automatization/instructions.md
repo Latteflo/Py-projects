@@ -8,30 +8,45 @@ This project automates the process of checking in and out on the Moodle platform
 - Selenium WebDriver
 - ChromeDriver compatible with your version of Google Chrome
 - Google Chrome Browser
+  
+# Moodle Attendance Automation
+
+This project automates the process of checking in and out on the Moodle platform, tailored specifically for BeCode's attendance system. It uses Python and Selenium to interact with web pages, automating daily attendance tasks based on the time of day and day of the week.
+
+## Prerequisites
+
+- Python 3.x
+- Selenium WebDriver
+- ChromeDriver compatible with your version of Google Chrome
+- Google Chrome Browser
 
 ## Setup Instructions
 
 1. **Install Python 3.x**:
-
    - Download and install from [python.org](https://www.python.org/downloads/).
 
 2. **Install Selenium**:
-
    - Run `pip install selenium` in your terminal or command prompt to install the Selenium package.
 
 3. **Download ChromeDriver**:
-
    - Go to the [ChromeDriver downloads page](https://sites.google.com/chromium.org/driver/) and download the version that matches your Google Chrome browser.
    - Extract and save `chromedriver.exe` to a known location on your system.
 
-4. **Prepare the Script**:
+4. **Clone the Repository**:
+   - Clone this repository to your local machine using `git clone <repository-url>`.
 
-   - Save the provided `moodle_attendance.py` script to a directory of your choice on your machine.
+5. **Create an Environment Variables File**:
+   - In the project directory, create a new file named `.env`.
+   - Open `.env` file in a text editor and add the following lines:
+     ```
+     MOODLE_USERNAME=your_username
+     MOODLE_PASSWORD=your_password
+     ```
+   - Replace `your_username` and `your_password` with your actual Moodle credentials.
 
-5. **Update the Script**:
+6. **Update the Script**:
    - Open `moodle_attendance.py` in a text editor.
-   - Update the `executable_path` in the `Service` object with the path to your `chromedriver.exe`.
-   - Replace `"bxl-2024-03-kamkar"` and `"password"` with your actual Moodle login credentials.
+   - Update the `executable_path` in the `Service` object to the path where you saved `chromedriver.exe`.
 
 ## Running the Script Manually
 
@@ -43,9 +58,13 @@ To run the script manually:
    ```shell
    python moodle_attendance.py
    ```
-   The script will automatically open a Chrome browser window, log into Moodle with the provided credentials, navigate to the attendance page, and perform the check-in or check-out operation based on the current time and day.
+4. The script will automatically open a Chrome browser window, log into Moodle with the credentials from your `.env` file, navigate to the attendance page, and perform the check-in or check-out operation based on the current time and day.
 
-### Automation
+### It's important not to upload your .env file to version control or share it with others as it contains sensitive information.
+
+#### Ensure that your .env file is listed in your .gitignore if using git to prevent it from being committed.
+
+## Automation
 
 For automated execution, we will be using scheduling tools like cron jobs on Linux/Mac or Task Scheduler on Windows. Set up the tool to run the script at times just before your check-in and check-out times.
 
