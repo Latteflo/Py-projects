@@ -25,6 +25,7 @@ def moodle_attendance():
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
     try:
+        print("Attempting to navigate to the Moodle login page...")
         # Navigate to Moodle login page
         driver.get("https://moodle.becode.org/login/index.php")
         # Wait for the page elements to load
@@ -37,17 +38,23 @@ def moodle_attendance():
         driver.find_element(By.ID, "loginbtn").click()
         # Wait for redirect after login
         time.sleep(2)
-
+        print("Login successful. Navigating to the attendance page...")
+        print("Navigating to current day's attendance...")
         # Navigate to the Moodle attendance page
         driver.get("https://moodle.becode.org/mod/attendance/view.php?id=311")
         time.sleep(2)
 
-        # Find and click on the "Days" button to view the attendance for the current day
-        days_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable(
-                (By.CSS_SELECTOR, ".attbtn > a[href*='&view=2']"))
+            # Find all elements with the "attbtn" class
+        att_buttons = WebDriverWait(driver, 10).until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".attbtn a"))
         )
-        days_button.click()
+
+        # Iterate over the buttons and click the one with the text "Days"
+        for button in att_buttons:
+            if "Days" in button.text:
+                button.click()
+                break
+
 
         # Get the current time to determine if it's time to check in or out
         now = datetime.now()
@@ -57,33 +64,27 @@ def moodle_attendance():
         # Adjusting for specific check-in and check-out times as you wish
         check_in_time = [850, 1326]  # 8:50 AM and 1:26 PM
         check_out_time = [1233, 1658]  # 12:33 PM and 16:58 PM
-
-        original_window = driver.current_window_handle
-
-        # Check if it's time to check in and if so, click the check-in button
+        
+        print("Determining if it's time to check in or out...")
+            # Check if it's time to check in and if so, click the check-in button
         if any(check_time <= current_hour_minute <= check_time + 8 for check_time in check_in_time):
             # Logic to find and click the "Check in" button
-            check_in_buttons = driver.find_elements(
-                By.CSS_SELECTOR, "a.btn[href*='checkin']")
+            print("Time to check in.")
+
+            check_in_buttons = WebDriverWait(driver, 10).until(
+                EC.visibility_of_all_elements_located((By.CSS_SELECTOR, "a.btn[href*='checkin']"))
+            )
             for button in check_in_buttons:
                 if button.is_displayed():
                     button.click()
-
-                    # Wait for the new window or tab to open
-                    WebDriverWait(driver, 10).until(
-                        EC.number_of_windows_to_be(2))
-
-                    # Loop through until we find a new window handle
-                    for window_handle in driver.window_handles:
-                        if window_handle != original_window:
-                            driver.switch_to.window(window_handle)
-                            break
-
-                    # Wait for the "select location" dropdown to be present after clicking "Check in"
-                    WebDriverWait(driver, 10).until(
-                        EC.visibility_of_element_located((By.NAME, "location"))
-                    )
                     break
+            
+            # Wait for the "select location" dropdown to be present after clicking "Check in"
+            print("Selecting location...")
+
+            WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.NAME, "location"))
+            )
 
             # After the dropdown is visible, select "On campus" or "At home" and submit
             location_select = Select(driver.find_element(By.NAME, "location"))
@@ -91,24 +92,33 @@ def moodle_attendance():
                 location_select.select_by_value("oncampus")
             else:  # Other days for "At home"
                 location_select.select_by_value("athome")
+
             # Click the submit button to complete the check-in
             driver.find_element(By.NAME, "submitbutton").click()
+            print("Check-in completed.")
 
-            # Close the new window and switch back to the original window
-            driver.close()
-            driver.switch_to.window(original_window)
 
         # Check if it's time to check out and if so, click the check-out button
         elif any(check_time <= current_hour_minute <= check_time + 8 for check_time in check_out_time):
             # Similar logic for "Check out"
+            print("Time to check out.")
+
             check_out_buttons = driver.find_elements(
                 By.CSS_SELECTOR, "a.btn[href*='checkout']")
             for button in check_out_buttons:
                 if button.is_displayed():
                     button.click()
                     break
+            print("Check-out completed.")
+        else:
+                    print("It's neither time to check in nor check out.")
+                    
+
+    except Exception as e:
+            print(f"An error occurred: {e}")
 
     finally:
+        print("Closing the browser...")
         driver.quit()
 
 
