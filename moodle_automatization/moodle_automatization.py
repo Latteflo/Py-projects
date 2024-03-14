@@ -59,10 +59,9 @@ def moodle_attendance():
         # Get the current time to determine if it's time to check in or out
         now = datetime.now()
         current_hour_minute = now.hour * 100 + now.minute
-        day_of_week = now.weekday()
 
         # Adjusting for specific check-in and check-out times as you wish
-        check_in_time = [845, 1320]  # 8:45 AM and 1:25 PM
+        check_in_time = [845, 1325]  # 8:45 AM and 1:25 PM
         check_out_time = [1230, 1658]  # 12:33 PM and 16:58 PM
         
         print("Determining if it's time to check in or out...")
