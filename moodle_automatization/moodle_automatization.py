@@ -62,41 +62,50 @@ def moodle_attendance():
         day_of_week = now.weekday()
 
         # Adjusting for specific check-in and check-out times as you wish
-        check_in_time = [850, 1326]  # 8:50 AM and 1:26 PM
-        check_out_time = [1233, 1658]  # 12:33 PM and 16:58 PM
+        check_in_time = [845, 1320]  # 8:45 AM and 1:25 PM
+        check_out_time = [1230, 1658]  # 12:33 PM and 16:58 PM
         
         print("Determining if it's time to check in or out...")
             # Check if it's time to check in and if so, click the check-in button
         if any(check_time <= current_hour_minute <= check_time + 8 for check_time in check_in_time):
             # Logic to find and click the "Check in" button
             print("Time to check in.")
+            try:
+                check_in_button = WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Check in')]"))
+                )
+                check_in_button.click()
+                print("Check-in button clicked.")
+            except Exception as e:
+                print(f"An error occurred while clicking the 'Check in' button: {e}")
+                
+            try:
+                # Wait for the dropdown to be visible
+                WebDriverWait(driver, 10).until(
+                     EC.visibility_of_element_located((By.NAME, "location"))
+                  )
 
-            check_in_buttons = WebDriverWait(driver, 10).until(
-                EC.visibility_of_all_elements_located((By.CSS_SELECTOR, "a.btn[href*='checkin']"))
-            )
-            for button in check_in_buttons:
-                if button.is_displayed():
-                    button.click()
-                    break
-            
-            # Wait for the "select location" dropdown to be present after clicking "Check in"
-            print("Selecting location...")
+                # Determine the current day of the week
+                current_day = datetime.now().weekday()
+                
+                # Select the dropdown
+                location_select = Select(driver.find_element(By.NAME, "location"))
 
-            WebDriverWait(driver, 10).until(
-                EC.visibility_of_element_located((By.NAME, "location"))
-            )
+                # Logic to select "On campus" or "At home" based on the day of the week
+                location_value = ""
+                if current_day in [0, 1]:  # If it's Monday (0) or Tuesday (1)
+                    location_value = "oncampus"
+                else:  # For other days
+                    location_value = "athome"
+                
+                location_select.select_by_value(location_value)
+                print(f"Location selected: {location_value.capitalize()}")
 
-            # After the dropdown is visible, select "On campus" or "At home" and submit
-            location_select = Select(driver.find_element(By.NAME, "location"))
-            if day_of_week in [0, 1]:  # Monday or Tuesday for "On campus"
-                location_select.select_by_value("oncampus")
-            else:  # Other days for "At home"
-                location_select.select_by_value("athome")
-
-            # Click the submit button to complete the check-in
-            driver.find_element(By.NAME, "submitbutton").click()
-            print("Check-in completed.")
-
+                # Click the submit button to complete the action
+                driver.find_element(By.NAME, "submitbutton").click()
+                print("Form submitted successfully.")
+            except Exception as e:
+                print(f"An error occurred while selecting location and submitting the form: {e}")
 
         # Check if it's time to check out and if so, click the check-out button
         elif any(check_time <= current_hour_minute <= check_time + 8 for check_time in check_out_time):
@@ -112,7 +121,6 @@ def moodle_attendance():
             print("Check-out completed.")
         else:
                     print("It's neither time to check in nor check out.")
-                    
 
     except Exception as e:
             print(f"An error occurred: {e}")
