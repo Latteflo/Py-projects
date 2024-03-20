@@ -26,20 +26,22 @@ This project automates the process of checking in and out on the Moodle platform
 
    - Download and install from [python.org](https://www.python.org/downloads/).
 
-2. **Install Selenium**:
+2. **Install Dependencies**:
 
    - Run `pip install selenium` in your terminal or command prompt to install the Selenium package.
+   - Run `pip install python-dotenv` in your terminal or command prompt to install the Dotenv package.
+
 
 3. **Download ChromeDriver**:
 
    - Go to the [ChromeDriver downloads page](https://sites.google.com/chromium.org/driver/) and download the version that matches your Google Chrome browser.
    - Extract and save `chromedriver.exe` to a known location on your system.
 
-4. **Clone the Repository**:
+3. **Clone the Repository**:
 
    - Clone this repository to your local machine using `git clone <repository-url>`.
 
-5. **Create an Environment Variables File**:
+4. **Create an Environment Variables File**:
 
    - In the project directory, create a new file named `.env`.
    - Open `.env` file in a text editor and add the following lines:
@@ -51,11 +53,11 @@ This project automates the process of checking in and out on the Moodle platform
      ```
 
    - Replace `your_username` and `your_password` with your actual Moodle credentials.
+   - Replace `your_path_to_chromedriver` with the path to your `chromedriver.exe`. Make sure to have it as an executable file!
 
-6. **Update the Script**:
-   - Open `moodle_attendance.py` in a text editor.
-   - Update the `executable_path` in the `Service` object with the path to your `chromedriver.exe`.
-   - Replace `"YOUR_USERNAME"` and `"YOUR_PASSWORD"` with your actual Moodle login credentials.
+ **And all set! You are ready to run the script.**
+
+Now : 
 
 ## Running the Script Manually
 
