@@ -61,8 +61,8 @@ def moodle_attendance():
         current_hour_minute = now.hour * 100 + now.minute
 
         # Adjusting for specific check-in and check-out times as you wish
-        check_in_time = [848, 1329]  # 08:48 AM and 1:29 PM
-        check_out_time = [1230, 1655]  # 12:30 PM and 16:55 PM
+        check_in_time = [845, 1325] 
+        check_out_time = [1230, 1655]  
         
         print("Determining if it's time to check in or out...")
             # Check if it's time to check in and if so, click the check-in button
@@ -127,6 +127,7 @@ def moodle_attendance():
     finally:
         print("Closing the browser...")
         driver.quit()
+ 
 
 
 if __name__ == "__main__":
